@@ -59,6 +59,7 @@ paths:
       summary: get the updated stock data for a specified day
       description: |-
         Returns a list of updated stock data for the given day
+        TODO: add bookstore id in the response for each book
       operationId: dailyStock
       produces:
         - application/json
