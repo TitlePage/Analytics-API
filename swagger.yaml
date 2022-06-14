@@ -85,6 +85,7 @@ paths:
       summary: Return a list of Onix 3.0 S3 URLs of all titles
       description: |-
         Return a list of Onix 3.0 S3 bucket URLs or signed URLs if S3 file is not available of all titles. The result is paged, maximum one thousand titles per page, 'next' properties is returned if it's not the last page
+        TODO: add Onix display link into the response
       operationId: onixAll
       produces:
         - application/json
@@ -115,6 +116,7 @@ paths:
       summary: Return a list of Onix 3.0 S3 URLs of the titles changed on the specified day
       description: |-
         Return a list of Onix 3.0 S3 URLs of the titles changed on the specified day. The result is paged, maximum one thousand titles per page, 'next' properties is returned if it's not the last page
+        TODO: add Onix display link into the response
       operationId: onixDelta
       produces:
         - application/json
