@@ -13,14 +13,16 @@ host: api.titlepage.com.au
 basePath: /v1
 tags:
   - name: Sales API
-    description: Sales Data APIs
+    description: Retrieve Sales Data
     externalDocs:
       description: Find out more
       url: https://titlepage.com.au
   - name: Stock API
-    description: Stock data APIs
+    description: Retrieve Stock data
   - name: Onix API
-    description: Onix 3.0 APIs
+    description: APIs to retrieve Onix file URLs
+  - name: Other API
+    description: APIs to retrieve bookstore and publisher information
 schemes:
   - https
 paths:
@@ -142,6 +144,40 @@ paths:
             $ref: '#/definitions/onixDelta'
       security:
         - api_key: []
+  /list/bookstore:
+    get:
+      tags:
+        - Other API
+      summary: Return the list of bookstores
+      description: |-
+        Return the list of all bookstores
+      operationId: listBookstore
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: A list of bookstores
+          schema:
+            $ref: '#/definitions/listBookstores'
+      security:
+        - api_key: []
+  /list/publisher:
+    get:
+      tags:
+        - Other API
+      summary: Return the list of publishers
+      description: |-
+        Return the list of all publishers
+      operationId: listPublisher
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: A list of publishers
+          schema:
+            $ref: '#/definitions/listPublisher'
+      security:
+        - api_key: []
 securityDefinitions:
   api_key:
     type: apiKey
@@ -157,6 +193,11 @@ definitions:
           type: integer
           format: int64
           example: 9780000000001
+        bookstore:
+          description: bookstore ID/SAN
+          type: integer
+          format: int32
+          example: 10023
         invoiceId:
           description: invoice id of this sale
           type: integer
@@ -255,4 +296,116 @@ definitions:
               example: 9780000000001
             URL:
               type: string
-              example: https://titlepage-onix.s3.amazonaws.com/17482/OexYz/qN3SK/KYCyA/cSaC4/DIEjS/7xeqo/RrspD/II3Nv/N2W5w/NDI2W/mudQ9/p13KH/r15sb/0EXTz/L4HeQ/pyR7t/RlH_3/A.xml.gz              
+              example: https://titlepage-onix.s3.amazonaws.com/17482/OexYz/qN3SK/KYCyA/cSaC4/DIEjS/7xeqo/RrspD/II3Nv/N2W5w/NDI2W/mudQ9/p13KH/r15sb/0EXTz/L4HeQ/pyR7t/RlH_3/A.xml.gz
+  listBookstores:
+    type: array
+    items:
+      type: object
+      properties:
+        SAN:
+          type: integer
+          example: 29138
+        nationalIDCode:
+          type: string
+          example: AU
+        title:
+          type: string
+          example: Mr
+        firstName:
+          type: string
+          example: Joe
+        lastName:
+          type: string
+          example: Public
+        jobFunction:
+          type: string
+          example: Purchasing
+        department:
+          type: string
+          example: Purchasing
+        phone:
+          type: string
+          example: 02 2222 3333
+        email:
+          type: string
+          example: joe@example.com
+        companyName:
+          type: string
+          example: Joe's Bookshop
+        ABN:
+          type: string
+          example: 981000222333
+        streetAddress:
+          type: string
+          example: 1 Main Street
+        suburb:
+          type: string
+          example: Sydney
+        state:
+          type: string
+          example: NSW
+        postcode:
+          type: integer
+          minimum: 1000
+          maximum: 8000
+          example: 2010
+        latitude:
+          type: number
+          minimum: -90
+          maximum: 90
+        longitude:
+          type: number
+          minimum: -90
+          maximum: 90
+  listPublisher:
+    type: array
+    items:
+      type: object
+      properties:
+        ID:
+          type: integer
+          example: 7342
+        nationalIDCode:
+          type: string
+          example: AU
+        title:
+          type: string
+          example: Mr
+        firstName:
+          type: string
+          example: Joe
+        lastName:
+          type: string
+          example: Public
+        jobFunction:
+          type: string
+          example: Purchasing
+        department:
+          type: string
+          example: Purchasing
+        phone:
+          type: string
+          example: 02 2222 3333
+        email:
+          type: string
+          example: joe@example.com
+        companyName:
+          type: string
+          example: Joe's Publisher
+        ABN:
+          type: string
+          example: 981000222333
+        streetAddress:
+          type: string
+          example: 1 Main Street
+        suburb:
+          type: string
+          example: Sydney
+        state:
+          type: string
+          example: NSW
+        postcode:
+          type: integer
+          minimum: 1000
+          maximum: 8000
+          example: 2010
