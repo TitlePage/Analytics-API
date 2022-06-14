@@ -1,0 +1,244 @@
+swagger: '2.0'
+info:
+  description: The Australian Publishers Association Sales Data Analytics Integration API
+  version: 1.0.0
+  title: Analystics Integration API
+  termsOfService: https://www.publishers.asn.au/Web/Terms-and-Conditions.aspx
+  contact:
+    email: support@stsoftware.com.au
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: api.titlepage.com.au
+basePath: /v1
+tags:
+  - name: Sales API
+    description: Sales Data APIs
+    externalDocs:
+      description: Find out more
+      url: https://titlepage.com.au
+  - name: Stock API
+    description: Stock data APIs
+  - name: Onix API
+    description: Onix 3.0 APIs
+schemes:
+  - https
+paths:
+  /sales:
+    get:
+      tags:
+        - Sales API
+      summary: get the sales data for a specified day
+      description: |-
+        Returns a list of sales data for the given day
+      operationId: dailySales
+      produces:
+        - application/json
+      parameters:
+        - name: date
+          in: query
+          description: date
+          required: true
+          type: string
+          format: date
+          example: 2022-06-30
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/dailySales'
+        '400':
+          description: Invalid date supplied
+      security:
+        - api_key: []
+  /stock:
+    get:
+      tags:
+        - Stock API
+      summary: get the updated stock data for a specified day
+      description: |-
+        Returns a list of updated stock data for the given day
+      operationId: dailyStock
+      produces:
+        - application/json
+      parameters:
+        - name: date
+          in: query
+          description: date
+          required: true
+          type: string
+          format: date
+          example: 2022-06-30
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/dailyStock'
+        '400':
+          description: Invalid date supplied
+      security:
+        - api_key: []
+  /list/onix/all:
+    get:
+      tags:
+        - Onix API
+      summary: Return a list of Onix 3.0 S3 URLs of all titles
+      description: |-
+        Return a list of Onix 3.0 S3 bucket URLs or signed URLs if S3 file is not available of all titles. The result is paged, maximum one thousand titles per page, 'next' properties is returned if it's not the last page
+      operationId: onixAll
+      produces:
+        - application/json
+      parameters:
+        - name: offset
+          in: query
+          description: Skip to this record number
+          required: false
+          type: integer
+          format: int32
+          minimum: 0
+          example: 3000
+        - name: cursor_id
+          in: query
+          description: Use this cursor to resume scroll ( if avaiable).
+          required: false
+          type: string
+          example: LDSG-2PHJ-4JYB-K38L
+      responses:
+        '200':
+          description: A list of title URLs.
+          schema:
+            $ref: '#/definitions/onixAll'
+      security:
+        - api_key: []
+  /list/onix/delta:
+    get:
+      tags:
+        - Onix API
+      summary: Return a list of Onix 3.0 S3 URLs of the titles changed on the specified day
+      description: |-
+        Return a list of Onix 3.0 S3 URLs of the titles changed on the specified day. The result is paged, maximum one thousand titles per page, 'next' properties is returned if it's not the last page
+      operationId: onixDelta
+      produces:
+        - application/json
+      parameters:
+        - name: date
+          in: query
+          description: date
+          required: true
+          type: string
+          format: date
+          example: 2022-06-30
+        - name: offset
+          in: query
+          description: Skip to this record number
+          required: false
+          type: integer
+          format: int32
+          minimum: 0
+          example: 3000
+        - name: cursor_id
+          in: query
+          description: Use this cursor to resume scroll ( if avaiable).
+          required: false
+          type: string
+          example: LDSG-2PHJ-4JYB-K38L
+      responses:
+        '200':
+          description: A list of title URLs.
+          schema:
+            $ref: '#/definitions/onixDelta'
+      security:
+        - api_key: []
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: api_key
+    in: header
+definitions:
+  dailySales:
+    type: array
+    items:
+      type: object
+      properties:
+        ISBN-13:
+          type: integer
+          format: int64
+          example: 9780000000001
+        invoiceId:
+          description: invoice id of this sale
+          type: integer
+          format: int64
+          example: 98337874854
+        timestamp:
+          type: string
+          format: date-time
+          example: '2022-06-25T14:23:10Z'
+          description: timestamp of the sale
+        sold:
+          description: the amount sold of this ISBN-13
+          type: integer
+          format: int64
+          minimum: 0
+          example: 1
+        runningSalesTotal:
+          description: the running sales total of this ISBN-13 on this day
+          type: integer
+          format: int64
+          minimum: 0
+          example: 16
+        averageSellingPrice:
+          description: the average sold price for this ISBN-13
+          type: number
+          format: float
+          minimum: 0
+          example: 19.95
+        CurrencyCode:
+          type: string
+          example: AUD    
+  dailyStock:
+    type: array
+    items:
+      type: object
+      properties:
+        ISBN-13:
+          type: integer
+          format: int64
+          example: 9780000000001
+        timestamp:
+          type: string
+          format: date-time
+          example: '2022-06-25T14:23:10Z'
+        on-order:
+          description: The on-order number
+          type: integer
+          format: int64
+          minimum: 0
+        in-stock:
+          type: integer
+          format: int64
+          minimum: 0
+        back-order:
+          type: integer
+          format: int64
+          minimum: 0
+        product-url:
+          type: string
+          example: https://www.bookstore.com/product/9780000000001
+  onixAll:
+    type: object
+    properties:
+      next:
+        type: string
+        example: https://api.titlepage.com.au/ReST/v1/list/onix/all?offset=1000&cursor_id=LDSG-2PHJ-4JYB-K38L
+      results:
+        type: array
+        items:
+          type: object
+          properties:
+            ISBN-13:
+              type: integer
+              format: int64
+              example: 9780000000001
+            URL:
+              type: string
+              example: https://titlepage-onix.s3.amazonaws.com/17482/OexYz/qN3SK/KYCyA/cSaC4/DIEjS/7xeqo/RrspD/II3Nv/N2W5w/NDI2W/mudQ9/p13KH/r15sb/0EXTz/L4HeQ/pyR7t/RlH_3/A.xml.gz
