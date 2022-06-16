@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   description: The Australian Publishers Association Sales Data Analytics Integration API
-  version: 1.0.0
+  version: 0.0.1
   title: Analystics Integration API
   termsOfService: https://www.publishers.asn.au/Web/Terms-and-Conditions.aspx
   contact:
