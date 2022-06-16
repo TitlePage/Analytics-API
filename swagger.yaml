@@ -339,6 +339,9 @@ definitions:
     items:
       type: object
       properties:
+        _href:
+          type: string
+          example: https://api.titlepage.com/ReST/v1/bookstore/29138
         SAN:
           type: integer
           example: 29138
