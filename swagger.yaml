@@ -200,6 +200,8 @@ paths:
           description: A list of publishers
           schema:
             $ref: '#/definitions/listPublisher'
+        '404':
+          description: SAN not found
       security:
         - api_key: []
 securityDefinitions:
