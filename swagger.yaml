@@ -161,6 +161,30 @@ paths:
             $ref: '#/definitions/listBookstores'
       security:
         - api_key: []
+  /bookstore/{SAN}:
+    get:
+      tags:
+        - Other API
+      summary: Return the details of a single bookstore
+      description: |-
+        Return the details of a single bookstore with the specified unique ID (SAN)
+      operationId: bookstore
+      produces:
+        - application/json
+      parameters:
+        - name: SAN
+          in: path
+          description: Unique ID of the bookstore. TODO if SAN is not unique, we will use another unique ID
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: The bookstore details
+          schema:
+            $ref: '#/definitions/listBookstores/items'
+      security:
+        - api_key: []
   /list/publisher:
     get:
       tags:
